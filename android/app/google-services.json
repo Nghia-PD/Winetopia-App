@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "982256841444",
+    "project_id": "winetopia-db6ec",
+    "storage_bucket": "winetopia-db6ec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982256841444:android:335c5cd4710cfd4feab2f1",
+        "android_client_info": {
+          "package_name": "com.example.winetopia_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK0Y0W2kynMVoVZKfpZyhufKlm-2FE31I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
