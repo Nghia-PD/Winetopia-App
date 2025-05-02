@@ -18,22 +18,6 @@ class Auth {
     }
   }
 
-  // The app will not let user to create new account
-
-  // Future<void> createUserWithEmailAndPassword(
-  //   String email,
-  //   String password,
-  // ) async {
-  //   try {
-  //     await _firebaseAuth.createUserWithEmailAndPassword(
-  //       email: email,
-  //       password: password,
-  //     );
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e.message);
-  //   }
-  // }
-
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
