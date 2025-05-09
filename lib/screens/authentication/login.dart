@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:winetopia_app/services/firebase_authentication_functions.dart';
 import 'package:winetopia_app/shares/clip_path.dart';
+import 'package:winetopia_app/shares/setting.dart';
 import 'package:winetopia_app/shares/loading.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -79,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromRGBO(139, 99, 218, 0.7),
+        backgroundColor: Setting().winetopiaBrightPurple,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       ),
@@ -103,9 +104,60 @@ class _LoginScreenState extends State<LoginScreen> {
       textAlign: TextAlign.left,
       style: TextStyle(
         fontSize: 32,
-        color: Colors.black,
+        color: Setting().winetopiaBrightPurple,
         fontWeight: FontWeight.bold,
       ),
+    );
+  }
+
+  Widget _contactUs() {
+    return Row(
+      children: [
+        Text(
+          "Need help? ",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 16,
+            color: Setting().winetopiaBrightPurple,
+          ),
+        ),
+        GestureDetector(
+          onTap:
+              () => showDialog(
+                context: context,
+                builder:
+                    (_) => AlertDialog(
+                      title: Text("Contact Us"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Email: tech@lemongrassproductions.co.nz"),
+                          SizedBox(height: 8),
+                          Text(
+                            "During event time, please see one of our staff member for assistance!",
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text("Close"),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+              ),
+          child: Text(
+            "Contact us",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+              color: Setting().winetopiaBrightPurple,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -117,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
         width: width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color.fromRGBO(139, 99, 218, 0.7), Colors.white],
+            colors: [Setting().winetopiaBrightPurple, Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -133,6 +185,13 @@ class _LoginScreenState extends State<LoginScreen> {
         : Scaffold(
           backgroundColor: Colors.white,
           body: Container(
+            // decoration: BoxDecoration(
+            //   gradient: LinearGradient(
+            //     begin: Alignment.topCenter,
+            //     end: Alignment.bottomCenter,
+            //     colors: [Setting().winetopiaBrightPurple, Colors.white],
+            //   ),
+            // ),
             padding: EdgeInsets.all(0),
             child: SingleChildScrollView(
               reverse: true,
@@ -153,7 +212,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           alignment: Alignment.topLeft,
                           child: _loginText(),
                         ),
-                        SizedBox(height: 20),
+
+                        SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: _contactUs(),
+                        ),
+                        SizedBox(height: 30),
                         _entryField("Email", _controllerEmail, false),
                         SizedBox(height: 10),
                         _entryField("Password", _controllerPassword, true),

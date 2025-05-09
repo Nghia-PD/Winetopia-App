@@ -7,7 +7,6 @@ class BottomWaveClipper extends CustomClipper<Path> {
     // Start at top-left
     path.lineTo(0, size.height);
     path.lineTo(size.width / 3 * 2, size.height);
-    //path.lineTo(size.width / 3 * 2, 0);
     path.quadraticBezierTo(
       size.width / 3 * 2 + 100,
       size.height / 2,
