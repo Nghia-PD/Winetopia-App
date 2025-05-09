@@ -7,14 +7,18 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
+  Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      return result.user;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      print(e.toString());
+
+      return null;
     }
   }
 

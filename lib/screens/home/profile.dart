@@ -30,8 +30,8 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget _ticket(String ticket_number) {
-    return QrImageView(data: ticket_number, size: 300);
+  Widget _ticket(String ticketNumber) {
+    return QrImageView(data: ticketNumber, size: 300);
   }
 
   @override
@@ -55,7 +55,7 @@ class Profile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _ticket(userData["ticket_number"]),
+              _ticket(userData["ticketNumber"]),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

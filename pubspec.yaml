@@ -39,6 +39,7 @@ dependencies:
   cloud_functions: ^5.4.0
   cloud_firestore: ^5.6.7
   qr_flutter: ^4.1.0
+  flutter_spinkit: ^5.2.1
 
 dev_dependencies:
   flutter_test:
