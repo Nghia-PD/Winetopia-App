@@ -6,4 +6,6 @@ class Setting {
   Color winetopiaMidNight = Color.fromRGBO(41, 38, 99, 1);
   Color winetopiaDustyBlue = Color.fromRGBO(58, 202, 226, 0.5);
   Color winetopiaTurquoise = Color.fromRGBO(0, 222, 195, 0.5);
+
+  double yPaddingInHome = 20;
 }

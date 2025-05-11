@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:winetopia_app/shares/setting.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key});
@@ -10,7 +11,7 @@ class Loading extends StatelessWidget {
       color: Colors.white,
       child: Center(
         child: SpinKitChasingDots(
-          color: Color.fromRGBO(139, 99, 218, 0.7),
+          color: Setting().winetopiaBrightPurple,
           size: 50.0,
         ),
       ),

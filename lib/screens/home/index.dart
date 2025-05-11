@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:winetopia_app/screens/home/event_info.dart';
 import 'package:winetopia_app/screens/home/home_content.dart';
 import 'package:winetopia_app/screens/home/profile.dart';
+import 'package:winetopia_app/shares/setting.dart';
 
 class Index extends StatefulWidget {
   const Index({super.key});
@@ -17,7 +18,7 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Winetopia 2025")),
+      appBar: AppBar(title: Text("")),
       body: _screens[_currentIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -25,7 +26,7 @@ class _IndexState extends State<Index> {
             _currentIndex = index;
           });
         },
-        indicatorColor: Colors.purpleAccent,
+        indicatorColor: Setting().winetopiaRose,
         selectedIndex: _currentIndex,
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: "Home"),

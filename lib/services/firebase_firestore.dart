@@ -15,7 +15,10 @@ class Db {
 
     try {
       DocumentSnapshot<Map<String, dynamic>> doc =
-          await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+          await FirebaseFirestore.instance
+              .collection('Attendees')
+              .doc(uid)
+              .get();
 
       return doc;
     } catch (e) {

@@ -26,7 +26,7 @@ class Auth {
     try {
       await _firebaseAuth.signOut();
     } on FirebaseAuthException catch (e) {
-      print(e);
+      print(e.toString());
     }
   }
 }

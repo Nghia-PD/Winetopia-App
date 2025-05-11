@@ -19,6 +19,93 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
+  Widget _myClip(double width, double height) {
+    return ClipPath(
+      clipper: BottomWaveClipper(),
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Setting().winetopiaBrightPurple, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _loginText() {
+    return Text(
+      "Login",
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        fontSize: 32,
+        color: Setting().winetopiaBrightPurple,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+
+  Widget _contactUsDialog() {
+    return AlertDialog(
+      title: Text(
+        "Contact Us",
+        style: TextStyle(color: Setting().winetopiaBrightPurple),
+      ),
+      backgroundColor: Colors.white,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Email: tech@lemongrassproductions.co.nz"),
+          SizedBox(height: 8),
+          Text(
+            "During event time, please see one of our staff member for assistance!",
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: Text("Close"),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+    );
+  }
+
+  Widget _contactUs() {
+    return Row(
+      children: [
+        Text(
+          "Need help? ",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 16,
+            color: Setting().winetopiaBrightPurple,
+          ),
+        ),
+        GestureDetector(
+          onTap:
+              () => showDialog(
+                context: context,
+                builder: (_) => _contactUsDialog(),
+              ),
+          child: Text(
+            "Contact us",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 16,
+              color: Setting().winetopiaBrightPurple,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _entryField(
     String title,
     TextEditingController controller,
@@ -98,86 +185,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _loginText() {
-    return Text(
-      "Login",
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        fontSize: 32,
-        color: Setting().winetopiaBrightPurple,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  Widget _contactUs() {
-    return Row(
-      children: [
-        Text(
-          "Need help? ",
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 16,
-            color: Setting().winetopiaBrightPurple,
-          ),
-        ),
-        GestureDetector(
-          onTap:
-              () => showDialog(
-                context: context,
-                builder:
-                    (_) => AlertDialog(
-                      title: Text("Contact Us"),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Email: tech@lemongrassproductions.co.nz"),
-                          SizedBox(height: 8),
-                          Text(
-                            "During event time, please see one of our staff member for assistance!",
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          child: Text("Close"),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
-                    ),
-              ),
-          child: Text(
-            "Contact us",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontSize: 16,
-              color: Setting().winetopiaBrightPurple,
-              decoration: TextDecoration.underline,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _myClip(double width, double height) {
-    return ClipPath(
-      clipper: BottomWaveClipper(),
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Setting().winetopiaBrightPurple, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return loading
@@ -185,13 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
         : Scaffold(
           backgroundColor: Colors.white,
           body: Container(
-            // decoration: BoxDecoration(
-            //   gradient: LinearGradient(
-            //     begin: Alignment.topCenter,
-            //     end: Alignment.bottomCenter,
-            //     colors: [Setting().winetopiaBrightPurple, Colors.white],
-            //   ),
-            // ),
             padding: EdgeInsets.all(0),
             child: SingleChildScrollView(
               reverse: true,
