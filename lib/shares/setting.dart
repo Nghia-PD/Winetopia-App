@@ -8,4 +8,5 @@ class Setting {
   Color winetopiaTurquoise = Color.fromRGBO(0, 222, 195, 0.5);
 
   double yPaddingInHome = 20;
+  int borderRadius = 15;
 }

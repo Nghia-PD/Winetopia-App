@@ -15,43 +15,168 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   final User user = Auth().currentUser!;
-  Widget _balanceContainer() {
-    return Container(
-      height: 75,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Setting().winetopiaBrightPurple, // Border color
-          width: 2.0, // Border width
-        ),
-        borderRadius: BorderRadius.circular(20),
+
+  Widget _topUpButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        print("Top Up!");
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Setting().winetopiaBrightPurple,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
       child: Row(
-        children: <Widget>[
+        mainAxisSize: MainAxisSize.min, // wrap content
+        children: [
           Text(
-            'Gold',
-            style: TextStyle(
-              color: Setting().winetopiaBrightPurple,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
+            'Top up',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          SizedBox(width: 8),
+          Icon(Icons.add_circle, color: Colors.white),
+        ],
+      ),
+    );
+  }
+
+  Widget _withdrawButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        print("Withdraw!");
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Setting().winetopiaBrightPurple,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min, // wrap content
+        children: [
+          Text(
+            'Withdraw',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          SizedBox(width: 8),
+          Icon(Icons.remove_circle, color: Colors.white),
+        ],
+      ),
+    );
+  }
+
+  Widget _balanceContainer() {
+    return Container(
+      padding: EdgeInsets.all(10),
+      height: 180,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Setting().winetopiaBrightPurple, width: 2.0),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/icons/gold-coin.png',
+                      width: 50,
+                      height: 50,
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Gold',
+                          style: TextStyle(
+                            color: Setting().winetopiaBrightPurple,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Text(
+                  '0',
+                  style: TextStyle(
+                    color: Setting().winetopiaBrightPurple,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(
-            '0',
-            style: TextStyle(
-              color: Setting().winetopiaBrightPurple,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/icons/silver-coin.png',
+                      width: 50,
+                      height: 50,
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Silver',
+                          style: TextStyle(
+                            color: Setting().winetopiaBrightPurple,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Text(
+                  '5',
+                  style: TextStyle(
+                    color: Setting().winetopiaBrightPurple,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
+          ),
+          SizedBox(height: 10),
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40, // same height
+                  child: _topUpButton(),
+                ),
+              ),
+              SizedBox(width: 50),
+              Expanded(child: SizedBox(height: 40, child: _withdrawButton())),
+            ],
           ),
         ],
       ),
     );
   }
 
+  final GlobalKey _walletKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
     return StreamBuilder<DocumentSnapshot>(
       stream:
           FirebaseFirestore.instance
@@ -62,9 +187,11 @@ class _HomeContentState extends State<HomeContent> {
         if (!snapshot.hasData) {
           return Loading();
         }
-        final userData = snapshot.data!.data() as Map<String, dynamic>;
+        //final userData = snapshot.data!.data() as Map<String, dynamic>;
 
         return Container(
+          key: _walletKey,
+          decoration: BoxDecoration(color: Colors.white),
           height: double.infinity,
           width: double.infinity,
           padding: EdgeInsets.only(
@@ -77,7 +204,7 @@ class _HomeContentState extends State<HomeContent> {
                 alignment: Alignment.topLeft,
                 child: Widgets().title("Wallet"),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               _balanceContainer(),
             ],
           ),

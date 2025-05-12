@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:winetopia_app/services/firebase_authentication_functions.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:winetopia_app/services/firebase_firestore.dart';
 import 'package:winetopia_app/shares/loading.dart';
 
 class Profile extends StatelessWidget {
@@ -38,11 +39,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
-      stream:
-          FirebaseFirestore.instance
-              .collection("Attendees")
-              .doc(user.uid)
-              .snapshots(),
+      stream: FirestoreService(uid: user.uid).attendeeData,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Loading();
