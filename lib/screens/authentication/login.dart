@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:winetopia_app/services/firebase_authentication_functions.dart';
+import 'package:winetopia_app/services/firebase_auth.dart';
 import 'package:winetopia_app/shares/clip_path.dart';
 import 'package:winetopia_app/shares/setting.dart';
 import 'package:winetopia_app/shares/loading.dart';
@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
         width: width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Setting().winetopiaBrightPurple, Colors.white],
+            colors: [Setting().otherComponentColor, Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       textAlign: TextAlign.left,
       style: TextStyle(
         fontSize: 32,
-        color: Setting().winetopiaBrightPurple,
+        color: Setting().textColor,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -50,11 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _contactUsDialog() {
     return AlertDialog(
-      title: Text(
-        "Contact Us",
-        style: TextStyle(color: Setting().winetopiaBrightPurple),
-      ),
-      backgroundColor: Colors.white,
+      title: Text("Contact Us", style: TextStyle(color: Setting().textColor)),
+      backgroundColor: Setting().bodyContainerBackgroundColor,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,10 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Text(
           "Need help? ",
           textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 16,
-            color: Setting().winetopiaBrightPurple,
-          ),
+          style: TextStyle(fontSize: 16, color: Setting().textColor),
         ),
         GestureDetector(
           onTap:
@@ -97,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 16,
-              color: Setting().winetopiaBrightPurple,
+              color: Setting().textColor,
               decoration: TextDecoration.underline,
             ),
           ),
@@ -125,11 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: Colors.blueGrey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide(color: Color.fromRGBO(139, 99, 218, 0.7)),
+          borderSide: BorderSide(color: Setting().borderLineColor),
         ),
         filled: true,
         fillColor: Colors.white,
@@ -155,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           loading = true;
         });
-        dynamic result = await Auth().signInWithEmailAndPassword(
+        dynamic result = await AuthService().signInWithEmailAndPassword(
           _controllerEmail.text,
           _controllerPassword.text,
         );
@@ -167,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Setting().winetopiaBrightPurple,
+        backgroundColor: Setting().buttonColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
       ),
@@ -176,10 +170,13 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Text(
             'Login',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Setting().textColorLight,
+            ),
           ),
           SizedBox(width: 8),
-          Icon(Icons.login, color: Colors.white),
+          Icon(Icons.login, color: Setting().otherComponentColorLight),
         ],
       ),
     );
@@ -190,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return loading
         ? Loading()
         : Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Setting().bodyContainerBackgroundColor,
           body: Container(
             padding: EdgeInsets.all(0),
             child: SingleChildScrollView(

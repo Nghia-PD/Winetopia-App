@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:winetopia_app/screens/authentication/login.dart';
 import 'package:winetopia_app/screens/home/index.dart';
-import 'package:winetopia_app/services/firebase_authentication_functions.dart';
+import 'package:winetopia_app/services/firebase_auth.dart';
 
 class AuthenticationNavigation extends StatefulWidget {
   const AuthenticationNavigation({super.key});
@@ -15,7 +15,7 @@ class _AuthenticationNavigationState extends State<AuthenticationNavigation> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Auth().authStateChanges,
+      stream: AuthService().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Index();

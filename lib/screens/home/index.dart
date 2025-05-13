@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:winetopia_app/models/attendee.dart';
 import 'package:winetopia_app/screens/home/event_info.dart';
 import 'package:winetopia_app/screens/home/home_content.dart';
 import 'package:winetopia_app/screens/home/profile.dart';
+import 'package:winetopia_app/services/firebase_auth.dart';
+import 'package:winetopia_app/services/firebase_firestore.dart';
+import 'package:winetopia_app/shares/loading.dart';
 import 'package:winetopia_app/shares/setting.dart';
 
 class Index extends StatefulWidget {
@@ -13,27 +19,47 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   int _currentIndex = 0;
-
-  final List<Widget> _screens = [HomeContent(), Profile(), const EventInfo()];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(""), backgroundColor: Colors.white),
-      body: _screens[_currentIndex],
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        indicatorColor: Setting().winetopiaRose,
-        selectedIndex: _currentIndex,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
-          NavigationDestination(icon: Icon(Icons.info), label: "Info"),
-        ],
-      ),
+    final User user = AuthService().currentUser!;
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirestoreService(uid: user.uid).attendeeDataStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Loading();
+        }
+        final attendeeData = AttendeeModel.fromMap(
+          user.uid,
+          snapshot.data!.data() as Map<String, dynamic>,
+        );
+
+        final List<Widget> screens = [
+          HomeContent(attendeeData: attendeeData),
+          Profile(attendeeData: attendeeData),
+          const EventInfo(),
+        ];
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(""),
+            backgroundColor: Setting().appBarBackgoundColor,
+          ),
+          body: screens[_currentIndex],
+          bottomNavigationBar: NavigationBar(
+            onDestinationSelected: (int index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            indicatorColor: Setting().otherComponentColor,
+            selectedIndex: _currentIndex,
+            destinations: const [
+              NavigationDestination(icon: Icon(Icons.home), label: "Home"),
+              NavigationDestination(icon: Icon(Icons.person), label: "Profile"),
+              NavigationDestination(icon: Icon(Icons.info), label: "Info"),
+            ],
+          ),
+        );
+      },
     );
   }
 }

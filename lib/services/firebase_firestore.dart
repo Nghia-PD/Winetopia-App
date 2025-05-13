@@ -6,7 +6,7 @@ class FirestoreService {
   FirestoreService({required this.uid});
 
   // stream data of current attendee
-  Stream<DocumentSnapshot> get attendeeData {
+  Stream<DocumentSnapshot> get attendeeDataStream {
     return FirebaseFirestore.instance
         .collection("Attendees")
         .doc(uid)

@@ -1,28 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:winetopia_app/services/firebase_authentication_functions.dart';
-import 'package:winetopia_app/shares/loading.dart';
+import 'package:winetopia_app/models/attendee.dart';
 import 'package:winetopia_app/shares/setting.dart';
 import 'package:winetopia_app/shares/widgets.dart';
 
 class HomeContent extends StatefulWidget {
-  const HomeContent({super.key});
+  final AttendeeModel attendeeData;
+  const HomeContent({required this.attendeeData, super.key});
 
   @override
   State<HomeContent> createState() => _HomeContentState();
 }
 
 class _HomeContentState extends State<HomeContent> {
-  final User user = Auth().currentUser!;
-
   Widget _topUpButton() {
     return ElevatedButton(
       onPressed: () async {
         print("Top Up!");
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Setting().winetopiaBrightPurple,
+        backgroundColor: Setting().buttonColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
       child: Row(
@@ -45,7 +41,7 @@ class _HomeContentState extends State<HomeContent> {
         print("Withdraw!");
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: Setting().winetopiaBrightPurple,
+        backgroundColor: Setting().buttonColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
       child: Row(
@@ -62,14 +58,14 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  Widget _balanceContainer() {
+  Widget _balanceContainer(String goldBalance, String silverBalance) {
     return Container(
       padding: EdgeInsets.all(10),
       height: 180,
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Setting().winetopiaBrightPurple, width: 2.0),
+        border: Border.all(color: Setting().borderLineColor, width: 2.0),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -94,7 +90,7 @@ class _HomeContentState extends State<HomeContent> {
                         Text(
                           'Gold',
                           style: TextStyle(
-                            color: Setting().winetopiaBrightPurple,
+                            color: Setting().textColor,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -104,9 +100,9 @@ class _HomeContentState extends State<HomeContent> {
                   ],
                 ),
                 Text(
-                  '0',
+                  goldBalance,
                   style: TextStyle(
-                    color: Setting().winetopiaBrightPurple,
+                    color: Setting().textColor,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -134,7 +130,7 @@ class _HomeContentState extends State<HomeContent> {
                         Text(
                           'Silver',
                           style: TextStyle(
-                            color: Setting().winetopiaBrightPurple,
+                            color: Setting().textColor,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -144,9 +140,9 @@ class _HomeContentState extends State<HomeContent> {
                   ],
                 ),
                 Text(
-                  '5',
+                  silverBalance,
                   style: TextStyle(
-                    color: Setting().winetopiaBrightPurple,
+                    color: Setting().textColor,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -156,14 +152,8 @@ class _HomeContentState extends State<HomeContent> {
           ),
           SizedBox(height: 10),
           Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: SizedBox(
-                  height: 40, // same height
-                  child: _topUpButton(),
-                ),
-              ),
+              Expanded(child: SizedBox(height: 40, child: _topUpButton())),
               SizedBox(width: 50),
               Expanded(child: SizedBox(height: 40, child: _withdrawButton())),
             ],
@@ -173,43 +163,29 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  final GlobalKey _walletKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    final h = MediaQuery.of(context).size.height;
-    return StreamBuilder<DocumentSnapshot>(
-      stream:
-          FirebaseFirestore.instance
-              .collection("Attendees")
-              .doc(user.uid)
-              .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Loading();
-        }
-        //final userData = snapshot.data!.data() as Map<String, dynamic>;
+    final goldBalance = widget.attendeeData.goldCoin;
+    final silverBalance = widget.attendeeData.silverCoin;
 
-        return Container(
-          key: _walletKey,
-          decoration: BoxDecoration(color: Colors.white),
-          height: double.infinity,
-          width: double.infinity,
-          padding: EdgeInsets.only(
-            left: Setting().yPaddingInHome,
-            right: Setting().yPaddingInHome,
+    return Container(
+      decoration: BoxDecoration(color: Colors.white),
+      height: double.infinity,
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        left: Setting().yPaddingInHome,
+        right: Setting().yPaddingInHome,
+      ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Widgets().titleInHome("Wallet"),
           ),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Widgets().title("Wallet"),
-              ),
-              SizedBox(height: 10),
-              _balanceContainer(),
-            ],
-          ),
-        );
-      },
+          SizedBox(height: 10),
+          _balanceContainer(goldBalance.toString(), silverBalance.toString()),
+        ],
+      ),
     );
   }
 }
