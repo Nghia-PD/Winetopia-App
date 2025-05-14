@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:winetopia_app/models/attendee.dart';
+import 'package:winetopia_app/screens/home/nfc.dart';
 import 'package:winetopia_app/shares/setting.dart';
 import 'package:winetopia_app/shares/widgets.dart';
 
-class HomeContent extends StatefulWidget {
+class HomeContent extends StatelessWidget {
   final AttendeeModel attendeeData;
-  const HomeContent({required this.attendeeData, super.key});
+  HomeContent({required this.attendeeData, super.key});
 
-  @override
-  State<HomeContent> createState() => _HomeContentState();
-}
-
-class _HomeContentState extends State<HomeContent> {
   Widget _topUpButton() {
     return ElevatedButton(
       onPressed: () async {
@@ -163,28 +159,82 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
+  final List<String> transactions = [
+    '\$20 to Exhibitor 2',
+    '\$50 to Exhibitor 1',
+    '\$20 to Exhibitor 2',
+    '\$100 to Supper Important Exhibitor',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+  ];
+
+  final List<String> subTitles = [
+    '\$20 to Exhibitor 2',
+    '\$50 to Exhibitor 1',
+    '\$20 to Exhibitor 2',
+    '\$100 to Supper Important Exhibitor',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+    '\$20 to Exhibitor 2',
+  ];
+
+  Widget _transactionsHistory() {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(), // prevent double scroll
+      shrinkWrap: true,
+      itemCount: transactions.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Icon(Icons.account_balance_wallet),
+          title: Text(transactions[index]),
+          subtitle: Text(subTitles[index]),
+          trailing: Icon(Icons.arrow_forward_ios, size: 16),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final goldBalance = widget.attendeeData.goldCoin;
-    final silverBalance = widget.attendeeData.silverCoin;
+    final goldBalance = attendeeData.goldCoin;
+    final silverBalance = attendeeData.silverCoin;
 
-    return Container(
-      decoration: BoxDecoration(color: Colors.white),
-      height: double.infinity,
-      width: double.infinity,
-      padding: EdgeInsets.only(
-        left: Setting().yPaddingInHome,
-        right: Setting().yPaddingInHome,
-      ),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Widgets().titleInHome("Wallet"),
-          ),
-          SizedBox(height: 10),
-          _balanceContainer(goldBalance.toString(), silverBalance.toString()),
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        decoration: BoxDecoration(color: Colors.white),
+
+        width: double.infinity,
+        padding: EdgeInsets.only(
+          left: Setting().yPaddingInHome,
+          right: Setting().yPaddingInHome,
+        ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Widgets().titleInHome("Wallet"),
+            ),
+            SizedBox(height: 10),
+            _balanceContainer(goldBalance.toString(), silverBalance.toString()),
+            NfcContainer(),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Widgets().titleInHome("Transaction History"),
+            ),
+            _transactionsHistory(),
+          ],
+        ),
       ),
     );
   }

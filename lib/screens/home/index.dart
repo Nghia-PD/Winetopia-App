@@ -39,9 +39,17 @@ class _IndexState extends State<Index> {
           const EventInfo(),
         ];
         return Scaffold(
-          appBar: AppBar(
-            title: Text(""),
-            backgroundColor: Setting().appBarBackgoundColor,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(70),
+            child: AppBar(
+              title: Image.asset(
+                'assets/images/Winetopia_Logo2024.png',
+                height: 75,
+                width: 75,
+              ),
+              backgroundColor: Setting().appBarBackgoundColor,
+              scrolledUnderElevation: 0,
+            ),
           ),
           body: screens[_currentIndex],
           bottomNavigationBar: NavigationBar(
