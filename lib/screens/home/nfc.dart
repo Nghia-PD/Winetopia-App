@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import 'package:winetopia_app/services/firebase_auth.dart';
+import 'package:winetopia_app/services/firebase_firestore.dart';
 import 'package:winetopia_app/shares/setting.dart';
 
 class NfcContainer extends StatefulWidget {
@@ -34,6 +36,8 @@ class _NfcContainerState extends State<NfcContainer> {
               setState(() {
                 _nfcData = text;
               });
+              String uid = AuthService().currentUser!.uid;
+              FirestoreService(uid: uid).updateBalance(_nfcData);
             }
           }
         });

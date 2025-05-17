@@ -79,28 +79,25 @@ class HomeContent extends StatelessWidget {
                       height: 50,
                     ),
                     SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Gold',
-                          style: TextStyle(
-                            color: Setting().textColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+
+                    Text(
+                      'Gold',
+                      style: TextStyle(
+                        color: Setting().textColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                Text(
-                  goldBalance,
-                  style: TextStyle(
-                    color: Setting().textColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    goldBalance,
+                    style: TextStyle(
+                      color: Setting().textColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -119,28 +116,25 @@ class HomeContent extends StatelessWidget {
                       height: 50,
                     ),
                     SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Silver',
-                          style: TextStyle(
-                            color: Setting().textColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+
+                    Text(
+                      'Silver',
+                      style: TextStyle(
+                        color: Setting().textColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
-                Text(
-                  silverBalance,
-                  style: TextStyle(
-                    color: Setting().textColor,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    silverBalance,
+                    style: TextStyle(
+                      color: Setting().textColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -150,7 +144,7 @@ class HomeContent extends StatelessWidget {
           Row(
             children: [
               Expanded(child: SizedBox(height: 40, child: _topUpButton())),
-              SizedBox(width: 50),
+              SizedBox(width: 20),
               Expanded(child: SizedBox(height: 40, child: _withdrawButton())),
             ],
           ),
@@ -212,20 +206,17 @@ class HomeContent extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(
+          color: Setting().bodyContainerBackgroundColor,
+        ),
 
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(
           left: Setting().yPaddingInHome,
           right: Setting().yPaddingInHome,
         ),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Widgets().titleInHome("Wallet"),
-            ),
-            SizedBox(height: 10),
             _balanceContainer(goldBalance.toString(), silverBalance.toString()),
             NfcContainer(),
             Align(

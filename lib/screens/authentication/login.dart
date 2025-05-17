@@ -196,11 +196,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   Align(
                     alignment: Alignment.topLeft,
-                    child: _myClip(
-                      MediaQuery.of(context).size.width,
-                      MediaQuery.of(context).size.height / 3,
+                    child:
+                    // Stack(
+                    //   children: [
+                    // _myClip(
+                    //   MediaQuery.of(context).size.width,
+                    //   MediaQuery.of(context).size.height / 3,
+                    // ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Image.asset(
+                        'assets/images/Winetopia_Logo2024.png',
+                        height: 200,
+                        width: 200,
+                      ),
                     ),
+                    // ],
                   ),
+                  // ),
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: Column(
