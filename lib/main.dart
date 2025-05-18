@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:winetopia_app/screens/authentication/index.dart';
+import 'package:winetopia_app/shares/nfc_state.dart';
 import 'package:winetopia_app/shares/setting.dart';
 import 'services/firebase_options.dart';
 
@@ -13,7 +15,12 @@ void main() async {
     SystemUiMode.manual,
     overlays: [], // Hides both status and navigation bars
   );
-  runApp(const Winetopia());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider<NfcState>(create: (_) => NfcState())],
+      child: const Winetopia(),
+    ),
+  );
 }
 
 class Winetopia extends StatelessWidget {

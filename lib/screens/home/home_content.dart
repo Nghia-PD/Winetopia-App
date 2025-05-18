@@ -11,7 +11,7 @@ class HomeContent extends StatelessWidget {
   Widget _topUpButton() {
     return ElevatedButton(
       onPressed: () async {
-        print("Top Up!");
+        //print("Top Up!");
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Setting().buttonColor,
@@ -34,7 +34,7 @@ class HomeContent extends StatelessWidget {
   Widget _withdrawButton() {
     return ElevatedButton(
       onPressed: () async {
-        print("Withdraw!");
+        //print("Withdraw!");
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Setting().buttonColor,

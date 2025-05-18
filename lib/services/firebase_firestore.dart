@@ -13,7 +13,9 @@ class FirestoreService {
         .snapshots();
   }
 
-  Future updateBalance(String wineId) async {
+  Future<DocumentSnapshot<Map<String, dynamic>>?> updateBalance(
+    String wineId,
+  ) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> attendeeDoc =
           await FirebaseFirestore.instance
@@ -71,9 +73,17 @@ class FirestoreService {
         "wineName": wineDoc["name"],
       });
 
-      print("done update");
+      return wineDoc;
     } catch (e) {
-      print(e);
+      return null;
     }
   }
+}
+
+class InsufficientBalanceException implements Exception {
+  final String message;
+  InsufficientBalanceException(this.message);
+
+  @override
+  String toString() => message;
 }

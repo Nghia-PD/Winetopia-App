@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:winetopia_app/services/firebase_auth.dart';
-import 'package:winetopia_app/shares/clip_path.dart';
+//import 'package:winetopia_app/shares/clip_path.dart';
 import 'package:winetopia_app/shares/setting.dart';
 import 'package:winetopia_app/shares/loading.dart';
 
@@ -19,22 +19,22 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
-  Widget _myClip(double width, double height) {
-    return ClipPath(
-      clipper: BottomWaveClipper(),
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Setting().otherComponentColor, Colors.white],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _myClip(double width, double height) {
+  //   return ClipPath(
+  //     clipper: BottomWaveClipper(),
+  //     child: Container(
+  //       height: height,
+  //       width: width,
+  //       decoration: BoxDecoration(
+  //         gradient: LinearGradient(
+  //           colors: [Setting().otherComponentColor, Colors.white],
+  //           begin: Alignment.topCenter,
+  //           end: Alignment.bottomCenter,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _loginText() {
     return Text(

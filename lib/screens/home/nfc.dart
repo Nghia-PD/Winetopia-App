@@ -1,88 +1,171 @@
+import 'package:awesome_ripple_animation/awesome_ripple_animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
-import 'package:winetopia_app/services/firebase_auth.dart';
-import 'package:winetopia_app/services/firebase_firestore.dart';
-import 'package:winetopia_app/shares/setting.dart';
+import 'package:provider/provider.dart';
+import 'package:winetopia_app/services/nfc.dart';
+import 'package:winetopia_app/shares/nfc_state.dart';
 
-class NfcContainer extends StatefulWidget {
+class NfcContainer extends StatelessWidget {
   const NfcContainer({super.key});
 
   @override
-  State<NfcContainer> createState() => _NfcContainerState();
-}
-
-class _NfcContainerState extends State<NfcContainer> {
-  String _nfcData = "Tap and scan NFC chip to buy wine";
-
-  void _startNFC() async {
-    NfcManager.instance.startSession(
-      onDiscovered: (NfcTag tag) async {
-        // Try to parse the tag as an NDEF tag
-        final ndef = Ndef.from(tag);
-
-        if (ndef == null) {
-          print('Tag is not NDEF formatted');
-          NfcManager.instance.stopSession();
-          return;
-        }
-
-        await ndef.read().then((NdefMessage message) {
-          for (var record in message.records) {
-            if (record.typeNameFormat == NdefTypeNameFormat.nfcWellknown) {
-              final payload = record.payload;
-
-              // Skip first byte (language code length byte)
-              final text = String.fromCharCodes(payload.sublist(3)).toString();
-              setState(() {
-                _nfcData = text;
-              });
-              String uid = AuthService().currentUser!.uid;
-              FirestoreService(uid: uid).updateBalance(_nfcData);
-            }
-          }
-        });
-
-        NfcManager.instance.stopSession();
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final nfcState = Provider.of<NfcState>(context);
+    final buttonStyle = _getButtonStyle(nfcState.state);
     return Container(
       padding: EdgeInsets.all(10),
       height: 250,
       width: double.infinity,
 
-      decoration: BoxDecoration(
-        color: Colors.white,
-        // border: Border.all(color: Setting().borderLineColor, width: 2.0),
-        // borderRadius: BorderRadius.circular(20),
-      ),
-
+      decoration: BoxDecoration(color: Colors.white),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // center vertically
-        crossAxisAlignment: CrossAxisAlignment.center, // center horizontally
         children: [
-          ElevatedButton(
-            onPressed: () {
-              _startNFC();
-            },
-            style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(40), // controls the size of the circle
-              backgroundColor: Setting().buttonColor, // button color
-            ),
-            child: Icon(
-              Icons.touch_app,
-              size: 32,
-              color: Setting().otherComponentColorLight,
-            ), // or Text("Scan")
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              if (nfcState.state == NfcStateEnum.scanning)
+                // Ripple effect
+                Positioned.fill(
+                  child: RippleAnimation(
+                    duration: const Duration(milliseconds: 1400),
+                    minRadius: 40,
+                    size: const Size(90.0, 90.0),
+                    repeat: true,
+                    ripplesCount: 6,
+                    color: buttonStyle['borderColor'].withOpacity(0.5),
+                    child: const SizedBox.expand(),
+                  ),
+                ),
+
+              // Circular button
+              GestureDetector(
+                onTap: () => _nfcButtonPressed(context),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 100),
+                  width: 100.0,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    color: buttonStyle['backgroundColor'],
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: buttonStyle['borderColor'],
+                      width: 3.0,
+                    ),
+                    boxShadow:
+                        nfcState.state == NfcStateEnum.scanning
+                            ? []
+                            : [
+                              BoxShadow(
+                                color: Colors.grey.shade500,
+                                offset: const Offset(6, 2),
+                                blurRadius: 5,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                  ),
+                  child: Center(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (
+                        Widget child,
+                        Animation<double> animation,
+                      ) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
+                      child:
+                          buttonStyle['icon'] is IconData
+                              ? Icon(
+                                buttonStyle['icon'],
+                                key: ValueKey(buttonStyle['icon']),
+                                size: 40,
+                                color: buttonStyle['iconColor'],
+                              )
+                              : ImageIcon(
+                                buttonStyle['icon']
+                                    .image, // Use the ImageIcon widget
+                                key: ValueKey(buttonStyle['icon']),
+                                size: 40,
+                                color: buttonStyle['icon'].color,
+                              ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 20),
-          Text(_nfcData.toString()),
+          const SizedBox(height: 15),
+
+          // Display the primary feedback message
+          Center(
+            child: Text(
+              nfcState.state.primaryMessage,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+
+          // Display the secondary feedback message
+          nfcState.state.secondaryMessage.isNotEmpty
+              ? Center(
+                child: Text(
+                  nfcState.state.secondaryMessage,
+                  style: const TextStyle(fontSize: 12),
+                ),
+              )
+              : const SizedBox.shrink(),
         ],
       ),
     );
+  }
+
+  /// Handles the button press event by initiating or stopping an NFC session.
+  void _nfcButtonPressed(BuildContext context) async {
+    final nfcState = Provider.of<NfcState>(context, listen: false);
+
+    if (nfcState.state == NfcStateEnum.scanning) {
+      // If the button is in 'scanning' state, stop the session and revert to 'idle'.
+      await NfcManager.instance.stopSession();
+      nfcState.updateState(NfcStateEnum.idle);
+    } else {
+      // If the button is not 'scanning', start a new NFC session.
+
+      await NfcService.instance.startNfcSession(context, nfcState.updateState);
+    }
+  }
+
+  /// Returns the button style based on the current NFC state.
+  Map<String, dynamic> _getButtonStyle(NfcStateEnum state) {
+    switch (state) {
+      case NfcStateEnum.scanning:
+        return {
+          'icon': CupertinoIcons.radiowaves_right,
+          'iconColor': const Color(0xFF3ACAE2),
+          'backgroundColor': Colors.white,
+          'borderColor': const Color(0xFF3ACAE2),
+        };
+      case NfcStateEnum.success:
+        return {
+          'icon': Icons.check,
+          'iconColor': Colors.green,
+          'backgroundColor': Colors.green.shade50,
+          'borderColor': Colors.green,
+        };
+      case NfcStateEnum.error:
+      case NfcStateEnum.notAvailable:
+      case NfcStateEnum.insufficientTokens:
+        return {
+          'icon': Icons.close,
+          'iconColor': Colors.red,
+          'backgroundColor': Colors.red.shade50,
+          'borderColor': Colors.red,
+        };
+      case NfcStateEnum.idle:
+        return {
+          'icon': const ImageIcon(AssetImage("assets/icons/tap_here.png")),
+          'iconColor': Colors.white,
+          'backgroundColor': const Color(0xFF99E4EF),
+          'borderColor': const Color(0xFF3ACAE2),
+        };
+    }
   }
 }
