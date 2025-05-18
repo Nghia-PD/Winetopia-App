@@ -6,7 +6,7 @@ class Widgets {
     return Text(
       titleText,
       style: TextStyle(
-        fontSize: 26,
+        fontSize: 22,
         color: Setting().textColor,
         fontWeight: FontWeight.bold,
       ),

@@ -15,12 +15,21 @@ class NfcContainer extends StatelessWidget {
     final buttonStyle = _getButtonStyle(nfcState.state);
     return Container(
       padding: EdgeInsets.all(10),
-      height: 250,
+      height: 200,
       width: double.infinity,
 
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: Colors.white,
+
+        // border: Border.all(
+        //   color: Colors.blue, // Border color
+        //   width: 2.0, // Border width
+        // ),
+        // borderRadius: BorderRadius.circular(8.0), // Optional: rounded corners
+      ),
       child: Column(
         children: [
+          SizedBox(height: 20),
           Stack(
             alignment: Alignment.center,
             children: [
