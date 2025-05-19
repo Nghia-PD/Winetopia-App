@@ -23,7 +23,7 @@ enum NfcStateEnum {
   idle('Tap to buy a wine sample', ''),
   scanning('Scanning...', 'Place your device on the wine tag'),
   success('Success!', 'Tap again to buy another wine sample'),
-  insufficientTokens('Oops, not enough tokens', 'Top up to continue'),
+  insufficientTokens('Oops, not enough coins', 'Top up to continue'),
   error('An error occurred while scanning', 'Press the button to try again'),
   notAvailable('NFC unavailable', 'Please turn on your NFC settings');
 

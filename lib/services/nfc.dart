@@ -79,9 +79,7 @@ class NfcService {
   ) async {
     try {
       final currentAttendee = AuthService().currentUser;
-
       final uid = currentAttendee!.uid;
-
       final wineSample = await FirestoreService(
         uid: uid,
       ).updateBalance(wineDocId);
