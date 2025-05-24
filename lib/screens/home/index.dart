@@ -9,6 +9,7 @@ import 'package:winetopia_app/services/firebase_auth.dart';
 import 'package:winetopia_app/services/firebase_firestore.dart';
 import 'package:winetopia_app/shares/loading.dart';
 import 'package:winetopia_app/shares/setting.dart';
+import 'package:winetopia_app/shares/widgets.dart';
 
 class Index extends StatefulWidget {
   const Index({super.key});
@@ -41,15 +42,7 @@ class _IndexState extends State<Index> {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(70),
-            child: AppBar(
-              title: Image.asset(
-                'assets/images/Winetopia_Logo2024.png',
-                height: 75,
-                width: 75,
-              ),
-              backgroundColor: Setting().appBarBackgoundColor,
-              scrolledUnderElevation: 0,
-            ),
+            child: Widgets().appBar(),
           ),
           body: screens[_currentIndex],
           bottomNavigationBar: NavigationBar(

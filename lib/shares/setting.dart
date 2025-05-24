@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Setting {
+  // Event coin price in cent
+  int goldPrice = 600;
+  int silverPrice = 200;
+
   // Color winetopiaRose = Color.fromRGBO(217, 43, 123, 1);
   // Color winetopiaBrightPurple = Color.fromRGBO(118, 25, 115, 1);
   // Color winetopiaMidNight = Color.fromRGBO(41, 38, 99, 1);

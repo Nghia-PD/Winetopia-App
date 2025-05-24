@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:winetopia_app/shares/setting.dart';
 
 class Widgets {
@@ -10,6 +10,18 @@ class Widgets {
         color: Setting().textColor,
         fontWeight: FontWeight.bold,
       ),
+    );
+  }
+
+  Widget appBar() {
+    return AppBar(
+      title: Image.asset(
+        'assets/images/Winetopia_Logo2024.png',
+        height: 75,
+        width: 75,
+      ),
+      backgroundColor: Setting().appBarBackgoundColor,
+      scrolledUnderElevation: 0,
     );
   }
 }

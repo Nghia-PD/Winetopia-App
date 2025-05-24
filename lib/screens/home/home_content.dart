@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:winetopia_app/models/attendee.dart';
 import 'package:winetopia_app/screens/home/nfc.dart';
+import 'package:winetopia_app/screens/topup/index.dart';
 import 'package:winetopia_app/shares/setting.dart';
 import 'package:winetopia_app/shares/widgets.dart';
 
@@ -8,10 +9,15 @@ class HomeContent extends StatelessWidget {
   final AttendeeModel attendeeData;
   HomeContent({required this.attendeeData, super.key});
 
-  Widget _topUpButton() {
+  Widget _topUpButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        //print("Top Up!");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Topup(attendeeData: attendeeData),
+          ),
+        );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Setting().buttonColor,
@@ -54,7 +60,11 @@ class HomeContent extends StatelessWidget {
     );
   }
 
-  Widget _balanceContainer(String goldBalance, String silverBalance) {
+  Widget _balanceContainer(
+    String goldBalance,
+    String silverBalance,
+    BuildContext context,
+  ) {
     return Container(
       padding: EdgeInsets.all(10),
       height: 180,
@@ -143,7 +153,9 @@ class HomeContent extends StatelessWidget {
           SizedBox(height: 10),
           Row(
             children: [
-              Expanded(child: SizedBox(height: 40, child: _topUpButton())),
+              Expanded(
+                child: SizedBox(height: 40, child: _topUpButton(context)),
+              ),
               SizedBox(width: 20),
               Expanded(child: SizedBox(height: 40, child: _withdrawButton())),
             ],
@@ -217,7 +229,11 @@ class HomeContent extends StatelessWidget {
         ),
         child: Column(
           children: [
-            _balanceContainer(goldBalance.toString(), silverBalance.toString()),
+            _balanceContainer(
+              goldBalance.toString(),
+              silverBalance.toString(),
+              context,
+            ),
             NfcContainer(),
             Align(
               alignment: Alignment.topLeft,
